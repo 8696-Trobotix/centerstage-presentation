@@ -92,8 +92,9 @@ jobs:
 
     - name: Build HTML
       run: |
-        ${{ env.MANIM }} ${{ env.FILE }} ${{ env.SCENES }}
-        manim-slides convert ${{ env.SCENES }} _site/index.html
+        # ${{ env.MANIM }} ${{ env.FILE }} ${{ env.SCENES }}
+        # manim-slides convert ${{ env.SCENES }} _site/index.html
+        ./src/build.sh final
 
     - name: Push to gh-pages branch
       if: github.event_name != 'pull_request'

@@ -6,3 +6,5 @@ __pycache__/
 _site/
 media/
 slides/
+
+temp.txt
