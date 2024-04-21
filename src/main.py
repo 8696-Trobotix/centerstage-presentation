@@ -36,17 +36,18 @@ class Contents(Slide):
         title = Title("Contents")
         description = Group(
             Paragraph(
-                "- Main codebase organization.", 
+                "- Main Codebase Organization", 
                 "- mollusc:", 
                 "  - Version", 
                 "  - Features", 
                 "  - Organization", 
-                "- Initialization", 
-                "- Autonomous", 
-                "- TeleOp", 
+                "- Exposition:", 
+                "  - Initialization", 
+                "  - Autonomous", 
+                "  - TeleOp", 
                 line_spacing=0.5
             ).scale(0.75), 
-            Text("Full source code is available in the team GitHub repository and at \nhttps://8696-trobotix.github.io/CENTERSTAGE.")
+            Text("Full source code is available on the team GitHub organization and the programming website.")
                 .move_to(3 * DOWN)
                 .scale(0.5)
         )
@@ -58,18 +59,24 @@ class Contents(Slide):
 
 class MainOrganization(Slide):
     def construct(self):
-        title = Title("Main Codebase Organization")
+        title = Title("Main Codebase Organization", z_index=100)
         tree = Code(
             "assets/centerstage_tree.txt", 
             tab_width=4
         ).next_to(title, DOWN)
-        note = Text("Further descriptions are available in the repository release section.")
+        note = Text("""Further descriptions are available in the 
+`centerstage` repository README and release sections.""")
 
-        title.set_z_index(100)
         note.scale(0.5).to_edge(DOWN)
 
         self.play(FadeIn(title), FadeIn(tree))
-        self.play(tree.animate.scale(0.425).next_to(title, DOWN), Write(note))
+        self.play(tree.animate.scale(0.405).next_to(title, DOWN), Write(note))
+
+        self.next_slide()
+
+        self.play(Transform(note, Text("""Important: The main branch on the repository contains a version 
+of the codebase integrated with a untested version of mollusc.
+See the README section for more details.""").scale(0.4).to_edge(DOWN)))
 
         self.next_slide()
 
@@ -77,20 +84,24 @@ class MainOrganization(Slide):
         set_code_fade(tree, 2.8)
 
         data = [
+            (12, 
+                """mollusc Library
+Contains functionality that can be reused across OpModes.""", 
+                lambda : [Transform(title, Title("Organization | mollusc"))], 
+                lambda : []
+            ), 
             (
                 17, 
-                "alpha, beta, and gamma are old codebases.\nYou can ignore them.", 
-                lambda : [], 
+                """`alpha`, `beta`, and `gamma` contain old codebases.
+They also contain older versions of mollusc.
+Ignore these.""", 
+                lambda : [Transform(title, Title("Organization | Directories"))], 
                 lambda : []
             ), 
             (
                 20, 
-                "delta is the most up-to-date version.\nBe sure to reference the dev2 branch instead of the main branch\n(see the note in README on the main branch).", 
-                lambda : [], 
-                lambda : []
-            ), 
-            (12, 
-                "mollusc library.", 
+                """`delta` contains the most up-to-date source code.
+Always reference this directory instead of the older ones.""", 
                 lambda : [], 
                 lambda : []
             ), 
@@ -98,8 +109,8 @@ class MainOrganization(Slide):
                 29, 
                 """Autonomous
 - Initialization and drive functionality through mollusc.
-- Hardware set up through SquidWare.
-- Uses TotemPipeline as the image processing pipeline for detecting the team prop.
+- Hardware set up through `SquidWare`.
+- Uses `TotemPipeline` as the image processing pipeline for detecting the team prop.
 - May use various subsystems to score.""", 
                 lambda : [
                     Transform(title, Title("Organization | Autonomous")), 
@@ -111,6 +122,58 @@ class MainOrganization(Slide):
                     unhighlight_line(tree, 22), 
                     unhighlight_line(tree, 23), 
                     unhighlight_line(tree, 31)
+                ]
+            ), 
+            (
+                30, 
+                """TeleOp
+- Initialization and drive functionality also through mollusc.
+- Hardware set up shared with Autonomous in `SquidWare`.
+- Uses subsystems.""", 
+                lambda : [
+                    Transform(title, Title("Organization | TeleOp")), 
+                    highlight_line(tree, 23), 
+                    highlight_line(tree, 31)
+                ], 
+                lambda : [
+                    unhighlight_line(tree, 23), 
+                    unhighlight_line(tree, 31)
+                ]
+            ), 
+            (
+                5, 
+                """Additional Assets
+- `SquidWare` (hardware initialization) uses mollusc 
+  to parse constants and other variables from `delta.txt` (i.e. PID coefficients).
+- `script_delta.txt` contains the full autonomous script 
+  read by `AutoSquidDelta`.""", 
+                lambda : [Transform(title, Title("Organization | Additional Assets"))], 
+                lambda : []
+            ), 
+            (
+                13, 
+                """These scripts were used to quickly archive directories.
+Ignore these.""", 
+                lambda : [Transform(title, Title("Organization | Miscellaneous"))], 
+                lambda : []
+            ), 
+            (
+                36, 
+                """These scripts can be used to help make changes remotely.
+- `pull.sh` and `push.sh` are shortcuts to pull / push to GitHub (e.g. upload / download).
+- `atlas.yml` and `summon.py` are used to establish a remote session 
+  whereby a programmer can edit code on the ThinkPad remotely.""", 
+                lambda : [
+                    highlight_line(tree, 35), 
+                    highlight_line(tree, 36), 
+                    highlight_line(tree, 37), 
+                    highlight_line(tree, 38)
+                ], 
+                lambda : [
+                    unhighlight_line(tree, 35), 
+                    unhighlight_line(tree, 36), 
+                    unhighlight_line(tree, 37), 
+                    unhighlight_line(tree, 38)
                 ]
             )
         ]

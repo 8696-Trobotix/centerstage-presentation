@@ -69,7 +69,7 @@ hl_surrounding = dict()
 
 def highlight_line(code: Code, line_num: int):
     global hl_surrounding
-    r = SurroundingRectangle(code.code.chars[line_num - 1], color=PURE_GREEN, buff=0)
+    r = SurroundingRectangle(code.code.chars[line_num - 1], color=PURE_GREEN, buff=0, stroke_width=2)
     hl_surrounding[line_num] = r
     return Create(r)
 
