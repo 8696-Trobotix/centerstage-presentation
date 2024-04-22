@@ -38,7 +38,7 @@ class Contents(Slide):
             Paragraph(
                 "- Main Codebase Organization", 
                 "- mollusc:", 
-                "  - Version", 
+                "  - Versions", 
                 "  - Features", 
                 "  - Organization", 
                 "- Exposition:", 
@@ -191,3 +191,55 @@ Ignore these.""",
             remove_code_dialog(self, dialog, add_to_buffer=True)
             animation_buffer.extend(unload_extra_anims())
         play_animation_buffer(self)
+
+class MolluscDetails(Slide):
+    def construct(self):
+        title = Title("mollusc")
+        version = MarkupText("""<big>Versions</big>
+
+There are three "versions" of mollusc:
+- <b>v0.1.0</b> is the "stable" version that should be used.
+- The <b>main branch</b> on the mollusc repository contains a refactored version of <b>v0.1.0</b> with an improved interface and additional features. However, it has not been tested and should not be used unless it is tested in the future.
+- <b>6e446fa</b> is the commit hash / ID of the revision of mollusc used at state. It's practically identical to <b>v0.1.0</b> and can be treated as such.
+
+Currently, mollusc can be added to any project by downloading or cloning it into the `teamcode` folder.
+A more convenient method may be developed in the future.""")
+        features_1 = MarkupText("""<big>Tested Features</big>
+- An "intepreter" that reads, parses, and executes a file containing a primitive yet customizable command-like language to control autonomous movements.
+Three dead wheel system odometry calculations.
+Note:
+From an initial starting orientation, forward movement corresponds to a positive X translation and rightward movement corresponds to a positive Y translation.
+<tt>
+           /\\
+           | +x
+ -y   robot front   +y
+&lt;-----           -----&gt;
+      robot back
+           | -x
+           \\/
+</tt>
+- Mecanum drive controlled by dead wheels for autonomous.
+- Field centric and robot centric TeleOp drivetrains.
+- External asset loading.
+- Program configuration via the Driver Station.
+- Gamepad controls utilities.
+- PIDF controller.
+- Contour-based multiple object detector for CV pipelines.""")
+        features_2 = MarkupText("""<big>Untested Features</big>
+- Mecanum drive controlled by wheel encoders for autonomous.
+- Some driver station configuration functions.
+- Low-pass and Kalman filters.
+- Threaded function execution wrapper.
+- Voltage compensator.
+- AprilTag detection EOCV pipeline
+  (newer versions of the robot controller SDK have this built in).""")
+
+        version.scale(0.5).next_to(title, DOWN)
+        features_1.scale(0.32).next_to(title, DOWN)
+        features_2.scale(0.32).next_to(title, DOWN)
+
+        self.play(FadeIn(title), FadeIn(version))
+        self.next_slide()
+        self.play(Transform(version, features_1))
+        self.next_slide()
+        self.play(Transform(version, features_2))
