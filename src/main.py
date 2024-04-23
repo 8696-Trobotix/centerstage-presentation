@@ -243,3 +243,164 @@ From an initial starting orientation, forward movement corresponds to a positive
         self.play(Transform(version, features_1))
         self.next_slide()
         self.play(Transform(version, features_2))
+        self.next_slide()
+
+        tree = Code(
+            "assets/mollusc_v0.1.0_tree.txt", 
+            tab_width=4
+        ).next_to(title, DOWN)
+
+        self.play(Transform(title, Title("mollusc | Organization")), FadeIn(tree), FadeOut(version))
+        self.play(tree.animate.scale(0.5).next_to(title, DOWN))
+
+        self.next_slide()
+
+        self.play(tree.animate.scale(1.4).next_to(title, DOWN).to_edge(LEFT), tree.background_mobject.animate.set_opacity(0))
+        set_code_fade(tree, 2.8)
+
+        def shift_dialog(ls, new_indicator_end, new_text_width):
+            ls[0] = new_indicator_end
+            ls[1] = new_text_width
+            return []
+
+        ls = [-1, 7]
+        data = [
+            (
+                37, 
+                """Provides a convenient way to access the 
+main OpMode from multiple classes.""", 
+                lambda : [], 
+                lambda : []
+            ), 
+            (
+                32, 
+                """Wrappers that provide additional functionality to existing SDK components.
+- `Encoder`: Reads the encoder counts and calculates the number 
+  of revolutions / distance traveled from a single encoder port.
+- `Make`: Provides shortcut functions to initialize hardware 
+  (i.e. initialize a motor and set its direction).
+- `MolluscLinearOpMode`: Wraps `LinearOpMode` so that `Mollusc` works.
+- `MolluscOpMode`: Wraps `OpMode` for the same reason.""", 
+                lambda : [], 
+                lambda : [
+                    *shift_dialog(ls, 0, 6)
+                ]
+            ), 
+            (
+                23, 
+                """Configuration utilities, controls, and PIDF controller.
+- `Asset`: Reads a text-based asset file separate from the source code.
+- `Configuration`: Parses the asset and provides methods 
+  for obtaining constants and other values specific in the asset.
+- `Controls`: Enhances gamepad controls 
+  (i.e. only perform an action when a button is pressed but not held).
+- `PID`: PIDF controller. Also contains a function that 
+  enables bulk reading (faster cycle times).""", 
+                lambda : [], 
+                lambda : [
+                    *shift_dialog(ls, -1, 7)
+                ]
+            ), 
+            (
+                3, 
+                """Autonomous-related classes.
+Red: Deadwheel odometry.
+Green: Script interpreter.
+Blue: Autonomous base classes.""", 
+                lambda : [
+                    highlight_line(tree, 3, PURE_RED), 
+                    highlight_line(tree, 4, PURE_RED), 
+                    highlight_line(tree, 5, PURE_RED), 
+                    highlight_line(tree, 6, PURE_GREEN), 
+                    highlight_line(tree, 7, PURE_GREEN), 
+                    highlight_line(tree, 8, PURE_GREEN), 
+                    highlight_line(tree, 9, PURE_GREEN), 
+                    highlight_line(tree, 10, PURE_BLUE), 
+                    highlight_line(tree, 11, PURE_BLUE)
+                ], 
+                lambda : [
+                    unhighlight_line(tree, 3), 
+                    unhighlight_line(tree, 4), 
+                    unhighlight_line(tree, 5), 
+                    unhighlight_line(tree, 6), 
+                    unhighlight_line(tree, 7), 
+                    unhighlight_line(tree, 8), 
+                    unhighlight_line(tree, 9), 
+                    unhighlight_line(tree, 10), 
+                    unhighlight_line(tree, 11)
+                ]
+            ), 
+            (
+                10, 
+                """Use `MecanumAutoII` instead of `MecanumAutoI`.
+II uses three deadwheel odometry, whereas I attempts to do localization 
+based on wheel encoders and has not been tested.""", 
+                lambda : [
+                    highlight_line(tree, 10, PURE_GREEN), 
+                    highlight_line(tree, 11, PURE_RED)
+                ], 
+                lambda : [
+                    unhighlight_line(tree, 10), 
+                    unhighlight_line(tree, 11), 
+                    *shift_dialog(ls, -0.5, 6.5)
+                ]
+            ), 
+            (
+                12, 
+                """Field-centric and robot-centric base classes.""", 
+                lambda : [], 
+                lambda : [
+                    *shift_dialog(ls, -1, 7)
+                ]
+            ), 
+            (
+                28, 
+                """Computer vision calculations.
+Use `ObjectDetector` to detect `VisionObject`s given a set of `ColorRange`s.""", 
+                lambda : [], 
+                lambda : [
+                    *shift_dialog(ls, 0, 6)
+                ]
+            ), 
+            (
+                17, 
+                """Various methods (i.e. those in `Configuration`) 
+may thow exceptions when a user-error is detected.
+Example: Requesting a configuration value that doesn't exist.
+Exceptions will normally terminate the OpMode 
+unless caught and handled.
+
+- `AssetRetrievalException`: The asset couldn't be loaded 
+  (possibly misnamed or in the wrong place).
+- `ConfigValueMissingException`: The configuration value doesn't exist.
+- `ParityException`: A feature was used that works in `LinearOpMode`s 
+  but not in `OpMode`s.
+- `ScriptParseException`: An error was encountered 
+  while parsing the autonomous script.""", 
+                lambda : [], 
+                lambda : [
+                    *shift_dialog(ls, -1, 7)
+                ]
+            ), 
+            (
+                22, 
+                """These are tests that were intended to verify the library's functionality.
+However, the tests themselves were never tested or used, so they can be ignored.""", 
+                lambda : [], 
+                lambda : []
+            )
+        ]
+
+        for line_num, text, extra_anims, unload_extra_anims in data:
+            focus_line(self, tree, line_num, 0, add_to_buffer=True)
+            play_animation_buffer(self)
+
+            dialog = create_code_dialog(self, tree, line_num, ls[0], 0.1, ls[1], text, add_to_buffer=True)
+            animation_buffer.extend(extra_anims())
+            play_animation_buffer(self)
+
+            self.next_slide()
+
+            remove_code_dialog(self, dialog, add_to_buffer=True)
+            animation_buffer.extend(unload_extra_anims())
+        play_animation_buffer(self)

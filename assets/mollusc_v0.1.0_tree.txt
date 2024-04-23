@@ -1,0 +1,37 @@
+mollusc/
+├── auto/
+│   ├── odometry/
+│   │   ├── DeadWheels.java
+│   │   └── Pose.java
+│   ├── Action.java
+│   ├── Auto.java
+│   ├── Instruction.java
+│   ├── Interpreter.java
+│   ├── MecanumAutoII.java
+│   └── MecanumAutoI.java
+├── drivetrain/
+│   ├── DrivetrainBaseFourWheel.java
+│   ├── Drivetrain.java
+│   ├── MecanumFieldCentric.java
+│   └── MecanumRobotCentric.java
+├── exception/
+│   ├── AssetRetrievalException.java
+│   ├── ConfigValueMissingException.java
+│   ├── ParityException.java
+│   └── ScriptParseException.java
+├── test/
+├── utility/
+│   ├── Asset.java
+│   ├── Configuration.java
+│   ├── Controls.java
+│   └── PID.java
+├── vision/
+│   ├── ColorRange.java
+│   ├── ObjectDetector.java
+│   └── VisionObject.java
+├── wrapper/
+│   ├── Encoder.java
+│   ├── Make.java
+│   ├── MolluscLinearOpMode.java
+│   └── MolluscOpMode.java
+└── Mollusc.java

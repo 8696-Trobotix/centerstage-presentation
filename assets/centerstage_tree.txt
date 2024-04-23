@@ -1,38 +1,38 @@
 centerstage/
-├ .devcontainer/
-│  └ devcontainer.json
+├─ .devcontainer/
+│  └─ devcontainer.json
 ├─ TeamCode/src/main/
-│  ├ assets/
-│  │ ├ mollusc/
-│  │ │ └ delta.txt
-│  │ ├ script_delta.txt
-│  │ └ todo.txt
-│  └ java/org/firstinspires/ftc/teamcode/
-│    ├ HAT/
-│    ├ mollusc/
-│    ├ scripts/
-│    │ ├ find_replace.sh
-│    │ └ migrate.sh
-│    ├ squid/
-│    │ ├ alpha/
-│    │ ├ beta/
-│    │ ├ gamma/
-│    │ └ delta/
-│    │   ├ pipelines/
-│    │   │ └ TotemPipeline.java
-│    │   ├ subsystems
-│    │   │ ├ Conveyor.java
-│    │   │ ├ Intake.java
-│    │   │ ├ Launcher.java
-│    │   │ ├ Lift.java
-│    │   │ └ Scoring.java
-│    │   ├ AutoSquidDelta.java
-│    │   ├ SquidDelta.java
-│    │   └ SquidWare.java
-│    └ test/
-├ .gitmodules
-├ build.dependencies.gradle
-├ pull.sh
-├ push.sh
-├ atlas.yml
-└ summon.py
+│  ├─ assets/
+│  │  ├─ mollusc/
+│  │  │  └─ delta.txt
+│  │  ├─ script_delta.txt
+│  │  └─ todo.txt
+│  └─ java/org/firstinspires/ftc/teamcode/
+│     ├─ HAT/
+│     ├─ mollusc/
+│     ├─ scripts/
+│     │  ├─ find_replace.sh
+│     │  └─ migrate.sh
+│     ├─ squid/
+│     │  ├─ alpha/
+│     │  ├─ beta/
+│     │  ├─ gamma/
+│     │  └─ delta/
+│     │     ├─ pipelines/
+│     │     │  └─ TotemPipeline.java
+│     │     ├─ subsystems
+│     │     │  ├─ Conveyor.java
+│     │     │  ├─ Intake.java
+│     │     │  ├─ Launcher.java
+│     │     │  ├─ Lift.java
+│     │     │  └─ Scoring.java
+│     │     ├─ AutoSquidDelta.java
+│     │     ├─ SquidDelta.java
+│     │     └─ SquidWare.java
+│     └─ test/
+├─ .gitmodules
+├─ build.dependencies.gradle
+├─ pull.sh
+├─ push.sh
+├─ atlas.yml
+└─ summon.py

@@ -67,9 +67,9 @@ def remove_code_dialog(scene: Slide, dialog, add_to_buffer=False):
 
 hl_surrounding = dict()
 
-def highlight_line(code: Code, line_num: int):
+def highlight_line(code: Code, line_num: int, color=PURE_GREEN):
     global hl_surrounding
-    r = SurroundingRectangle(code.code.chars[line_num - 1], color=PURE_GREEN, buff=0, stroke_width=2)
+    r = SurroundingRectangle(code.code.chars[line_num - 1], color=color, buff=0, stroke_width=2)
     hl_surrounding[line_num] = r
     return Create(r)
 
