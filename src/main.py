@@ -7,6 +7,7 @@ from util import *
 
 class Introduction(Slide):
     def construct(self):
+        self.wait_time_between_slides = 0.1
         title = Title("Trobotix CENTERSTAGE Source Code Overview")
         centerstage = ImageMobject("assets/centerstage.png")
         icon = ImageMobject("assets/icon.png")
@@ -33,6 +34,7 @@ class Introduction(Slide):
 
 class Contents(Slide):
     def construct(self):
+        self.wait_time_between_slides = 0.1
         title = Title("Contents")
         description = Group(
             Paragraph(
@@ -59,6 +61,7 @@ class Contents(Slide):
 
 class MainOrganization(Slide):
     def construct(self):
+        self.wait_time_between_slides = 0.1
         title = Title("Main Codebase Organization", z_index=100)
         tree = Code(
             "assets/centerstage_tree.txt", 
@@ -194,6 +197,7 @@ Ignore these.""",
 
 class MolluscDetails(Slide):
     def construct(self):
+        self.wait_time_between_slides = 0.1
         title = Title("mollusc")
         version = MarkupText("""<big>Versions</big>
 
