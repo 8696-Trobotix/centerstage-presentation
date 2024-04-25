@@ -77,7 +77,7 @@ class MainOrganization(Slide):
 
         self.next_slide()
 
-        self.play(Transform(note, Text("""Important: The main branch on the repository contains a version 
+        self.play(Wipe2(note, Text("""Important: The main branch on the repository contains a version 
 of the codebase integrated with a untested version of mollusc.
 See the README section for more details.""").scale(0.4).to_edge(DOWN)))
 
@@ -90,7 +90,7 @@ See the README section for more details.""").scale(0.4).to_edge(DOWN)))
             (12, 
                 """mollusc Library
 Contains functionality that can be reused across OpModes.""", 
-                lambda : [Transform(title, Title("Organization | mollusc"))], 
+                lambda : [Wipe2(title, Title("Organization | mollusc"))], 
                 lambda : []
             ), 
             (
@@ -98,7 +98,7 @@ Contains functionality that can be reused across OpModes.""",
                 """`alpha`, `beta`, and `gamma` contain old codebases.
 They also contain older versions of mollusc.
 Ignore these.""", 
-                lambda : [Transform(title, Title("Organization | Directories"))], 
+                lambda : [Wipe2(title, Title("Organization | Directories"))], 
                 lambda : []
             ), 
             (
@@ -116,7 +116,7 @@ Always reference this directory instead of the older ones.""",
 - Uses `TotemPipeline` as the image processing pipeline for detecting the team prop.
 - May use various subsystems to score.""", 
                 lambda : [
-                    Transform(title, Title("Organization | Autonomous")), 
+                    Wipe2(title, Title("Organization | Autonomous")), 
                     highlight_line(tree, 22), 
                     highlight_line(tree, 23), 
                     highlight_line(tree, 31)
@@ -134,7 +134,7 @@ Always reference this directory instead of the older ones.""",
 - Hardware set up shared with Autonomous in `SquidWare`.
 - Uses subsystems.""", 
                 lambda : [
-                    Transform(title, Title("Organization | TeleOp")), 
+                    Wipe2(title, Title("Organization | TeleOp")), 
                     highlight_line(tree, 23), 
                     highlight_line(tree, 31)
                 ], 
@@ -150,14 +150,14 @@ Always reference this directory instead of the older ones.""",
   to parse constants and other variables from `delta.txt` (i.e. PID coefficients).
 - `script_delta.txt` contains the full autonomous script 
   read by `AutoSquidDelta`.""", 
-                lambda : [Transform(title, Title("Organization | Additional Assets"))], 
+                lambda : [Wipe2(title, Title("Organization | Additional Assets"))], 
                 lambda : []
             ), 
             (
                 13, 
                 """These scripts were used to quickly archive directories.
 Ignore these.""", 
-                lambda : [Transform(title, Title("Organization | Miscellaneous"))], 
+                lambda : [Wipe2(title, Title("Organization | Miscellaneous"))], 
                 lambda : []
             ), 
             (
@@ -244,9 +244,9 @@ From an initial starting orientation, forward movement corresponds to a positive
 
         self.play(FadeIn(title), FadeIn(version))
         self.next_slide()
-        self.play(Transform(version, features_1))
+        self.play(Wipe2(version, features_1))
         self.next_slide()
-        self.play(Transform(version, features_2))
+        self.play(Wipe2(version, features_2))
         self.next_slide()
 
         tree = Code(
@@ -254,7 +254,7 @@ From an initial starting orientation, forward movement corresponds to a positive
             tab_width=4
         ).next_to(title, DOWN)
 
-        self.play(Transform(title, Title("mollusc | Organization")), FadeIn(tree), FadeOut(version))
+        self.play(Wipe2(title, Title("mollusc | Organization")), FadeIn(tree), FadeOut(version))
         self.play(tree.animate.scale(0.5).next_to(title, DOWN))
 
         self.next_slide()
@@ -408,3 +408,7 @@ However, the tests themselves were never tested or used, so they can be ignored.
             remove_code_dialog(self, dialog, add_to_buffer=True)
             animation_buffer.extend(unload_extra_anims())
         play_animation_buffer(self)
+
+        # Extend slide transition time.
+        # Undraw dialog line from left to right.
+        # Fix autonomous related classes line.

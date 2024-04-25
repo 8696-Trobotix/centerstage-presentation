@@ -3,6 +3,18 @@ from manim_slides import Slide
 
 animation_buffer = []
 
+class Wipe2(AnimationGroup):
+    def __init__(self, mobject, target_mobject, shift=LEFT):
+        self._mobject = mobject
+        self._target_mobject = target_mobject
+        super().__init__(FadeOut(mobject, shift=shift), FadeIn(target_mobject, shift=shift))
+    
+    def clean_up_from_scene(self, scene):
+        super().clean_up_from_scene(scene)
+        self._mobject.become(self._target_mobject)
+        scene.add(self._mobject)
+        scene.remove(self._target_mobject)
+
 def play_animation_buffer(scene: Slide):
     global animation_buffer
     scene.play(*animation_buffer)
