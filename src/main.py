@@ -31,6 +31,7 @@ class Introduction(Slide):
 
         self.next_slide(auto_next=True)
         fade_out_all(self)
+        self.wait(0.5)
 
 class Contents(Slide):
     def construct(self):
@@ -58,6 +59,7 @@ class Contents(Slide):
 
         self.next_slide(auto_next=True)
         fade_out_all(self)
+        self.wait(0.5)
 
 class MainOrganization(Slide):
     def construct(self):
@@ -194,6 +196,7 @@ Ignore these.""",
             remove_code_dialog(self, dialog, add_to_buffer=True)
             animation_buffer.extend(unload_extra_anims())
         play_animation_buffer(self)
+        self.wait(0.5)
 
 class MolluscDetails(Slide):
     def construct(self):
@@ -408,6 +411,7 @@ However, the tests themselves were never tested or used, so they can be ignored.
             remove_code_dialog(self, dialog, add_to_buffer=True)
             animation_buffer.extend(unload_extra_anims())
         play_animation_buffer(self)
+        self.wait(0.5)
 
         # Extend slide transition time.
         # Undraw dialog line from left to right.
