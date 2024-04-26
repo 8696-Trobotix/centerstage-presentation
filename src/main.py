@@ -306,7 +306,7 @@ main OpMode from multiple classes.""",
                 ]
             ), 
             (
-                3, 
+                2, 
                 """Autonomous-related classes.
 Red: Deadwheel odometry.
 Green: Script interpreter.
