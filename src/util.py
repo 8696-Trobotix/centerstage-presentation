@@ -51,7 +51,7 @@ def create_code_dialog(scene: Slide, code: Code, line: int, end_position: float,
     vgroup = code.code.chars[line - 1]
     x = vgroup.get_x()
     y = vgroup.get_y()
-    indicator = Line(start=[x + vgroup.width / 2, y, 0], end=[end_position, y, 0])
+    indicator = Line(start=[end_position, y, 0], end=[x + vgroup.width / 2, y, 0])
     # indicator = Line([0, 0, 0], end=[end_position, 0, 0])
     description = Paragraph(text)
     description.width = text_width
