@@ -184,7 +184,7 @@ Ignore these.""",
         ]
 
         for line_num, text, extra_anims, unload_extra_anims in data:
-            focus_line(self, tree, line_num, 0, add_to_buffer=True)
+            focus_line(tree, line_num, 0, add_to_buffer=True)
             play_animation_buffer(self)
 
             dialog = create_code_dialog(self, tree, line_num, -1, 0.1, 7, text, add_to_buffer=True)
@@ -399,7 +399,7 @@ However, the tests themselves were never tested or used, so they can be ignored.
         ]
 
         for line_num, text, extra_anims, unload_extra_anims in data:
-            focus_line(self, tree, line_num, 0, add_to_buffer=True)
+            focus_line(tree, line_num, 0, add_to_buffer=True)
             play_animation_buffer(self)
 
             dialog = create_code_dialog(self, tree, line_num, ls[0], 0.1, ls[1], text, add_to_buffer=True)
@@ -413,6 +413,20 @@ However, the tests themselves were never tested or used, so they can be ignored.
         play_animation_buffer(self)
         self.wait(0.5)
 
-        # Extend slide transition time.
-        # Undraw dialog line from left to right.
-        # Fix autonomous related classes line.
+class Initialization(Slide):
+    def construct(self):
+        self.wait_time_between_slides = 0.1
+
+        # Code("assets/source_code/what.txt", font="Fira Code")
+        # Internal Manim bug halts progress here: https://github.com/ManimCommunity/manim/issues/3237
+
+        exposition(self, [
+            Step(
+                title="Test", 
+                source_code="SquidWare.java", 
+                lang="java", 
+                focus_line=90, 
+                main_lines=(87, 93), 
+                text="This is a test."
+            )
+        ])

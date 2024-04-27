@@ -1,5 +1,9 @@
+from dataclasses import dataclass
+
 from manim import *
 from manim_slides import Slide
+
+import mods.code_mobject
 
 animation_buffer = []
 
@@ -36,15 +40,14 @@ def set_code_fade(code: Code, max_y: float):
     for line in code.code.chars:
         line.add_updater(updater)
 
-def focus_line(scene: Slide, code: Code, line: int, target_y: float, add_to_buffer=False):
+def focus_line(code: Code, line: int, target_y: float, add_to_buffer=False):
     global animation_buffer
     vgroup = code.line_numbers.chars[line - 1]
     dy = target_y - vgroup.get_y()
     anim = code.animate.shift(dy * UP)
     if add_to_buffer:
         animation_buffer.append(anim)
-    else:
-        scene.play(anim)
+    return anim
 
 def create_code_dialog(scene: Slide, code: Code, line: int, end_position: float, padding: float, text_width: float, text: str, add_to_buffer=False):
     global animation_buffer
@@ -88,3 +91,52 @@ def highlight_line(code: Code, line_num: int, color=PURE_GREEN):
 def unhighlight_line(code: Code, line_num: int):
     global hl_surrounding
     return Uncreate(hl_surrounding.pop(line_num))
+
+def get_source_code(file_name: str, title: Title, lang):
+    return mods.code_mobject.Code(
+        f"assets/source_code/{file_name}", 
+        tab_width=4, 
+        background="window", 
+        language=lang
+    ).scale(1.4 * 0.405).next_to(title, DOWN).to_edge(LEFT)
+
+@dataclass
+class Step:
+    title: any=None
+    source_code: any=None
+    section: any=None
+    lang: any=None
+    focus_line: any=None
+    main_lines: any=None
+    text: any=None
+    add_load_anims: any=None
+    add_unload_anims: any=None
+
+def exposition(scene: Slide, steps: list[Step]):
+    start = True
+    load_anims = []
+
+    current = Step()
+
+    for step in steps:
+        if start:
+            current.title = Title(step.title)
+            current.source_code = get_source_code(step.source_code, current.title, step.lang)
+            # set_code_fade(current.source_code, 2.8)
+            current.main_lines = BackgroundRectangle(
+                VGroup(current.source_code.code.chars[step.main_lines[0]:step.main_lines[1] + 1]), 
+                fill_color=YELLOW, 
+                fill_opacity=0.5, 
+                corner_radius=0.2
+            )
+            current.text = Paragraph(step.text, width=7).move_to(6 * RIGHT)
+
+            scene.play(
+                FadeIn(current.title), 
+                FadeIn(current.source_code), 
+                focus_line(current.source_code, step.focus_line, 2.5), 
+                FadeIn(current.main_lines), 
+                FadeIn(current.text)
+            )
+
+            start = False
