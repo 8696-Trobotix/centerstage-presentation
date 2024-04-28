@@ -96,7 +96,7 @@ def get_source_code(file_name: str, title: Title, lang):
     return mods.code_mobject.Code(
         f"assets/source_code/{file_name}", 
         tab_width=4, 
-        background="window", 
+        # background="window", 
         language=lang
     ).scale(1.4 * 0.405).next_to(title, DOWN).to_edge(LEFT)
 
@@ -123,19 +123,19 @@ def exposition(scene: Slide, steps: list[Step]):
             current.title = Title(step.title)
             current.source_code = get_source_code(step.source_code, current.title, step.lang)
             # set_code_fade(current.source_code, 2.8)
-            current.main_lines = BackgroundRectangle(
-                VGroup(current.source_code.code.chars[step.main_lines[0]:step.main_lines[1] + 1]), 
-                fill_color=YELLOW, 
-                fill_opacity=0.5, 
-                corner_radius=0.2
-            )
+            # current.main_lines = BackgroundRectangle(
+            #     VGroup(current.source_code.code.chars[step.main_lines[0]:step.main_lines[1] + 1]), 
+            #     fill_color=YELLOW, 
+            #     fill_opacity=0.5, 
+            #     corner_radius=0.2
+            # )
             current.text = Paragraph(step.text, width=7).move_to(6 * RIGHT)
 
             scene.play(
                 FadeIn(current.title), 
                 FadeIn(current.source_code), 
-                focus_line(current.source_code, step.focus_line, 2.5), 
-                FadeIn(current.main_lines), 
+                # focus_line(current.source_code, step.focus_line, 2.5), 
+                # FadeIn(current.main_lines), 
                 FadeIn(current.text)
             )
 
