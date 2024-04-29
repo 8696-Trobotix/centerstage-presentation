@@ -97,7 +97,8 @@ def get_source_code(file_name: str, title: Title, lang):
         f"assets/source_code/{file_name}", 
         tab_width=4, 
         background="window", 
-        language=lang
+        language=lang, 
+        style="github-dark"
     ).scale(1.4 * 0.405).next_to(title, DOWN).to_edge(LEFT)
 
 @dataclass

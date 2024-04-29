@@ -22,7 +22,11 @@ from manim.constants import *
 from manim.mobject.geometry.arc import Dot
 from manim.mobject.geometry.polygram import RoundedRectangle
 from manim.mobject.geometry.shape_matchers import SurroundingRectangle
+# Begin modification.
+
 from mods.text_mobject import Paragraph
+
+# End modification.
 from manim.mobject.types.vectorized_mobject import VGroup
 from manim.utils.color import WHITE
 
