@@ -422,12 +422,48 @@ class Initialization(Slide):
 
         exposition(self, [
             Step(
-                title="Test", 
+                title="Hardware Initialization", 
                 source_code="SquidWare.java", 
                 lang="java", 
-                focus_line=90, 
-                main_lines=(87, 93), 
-                text="This is a test."
+                focus_line=19, 
+                main_lines=(19, 19), 
+                text="""All hardware initialization is done in `SquidWare` and shared between the autonomous and TeleOp."""
+            ), 
+            Step(
+                focus_line=1, 
+                main_lines=(1, 1), 
+                text="""You can determine the directory of a class based on what package it's in. In this case, `SquidWare` is located under `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/squid/delta`."""
+            ), 
+            Step(
+                main_lines=(3, 3), 
+                text="""Importing subsystem classes. These include the classes that manage the intake, launcher, scoring system, etc."""
+            ), 
+            Step(
+                main_lines=(4, 8), 
+                text="""Before we use mollusc functionality, we have to import the correct classes. The asterisk indicates that we're importing all available classes from that package."""
+            ), 
+            Step(
+                main_lines=(11, 15), 
+                text="""Import hardware device classes from the FTC SDK."""
+            ), 
+            Step(
+                main_lines=(17, 17), 
+                text="""Some packages will be located elsewhere."""
+            ), 
+            Step(
+                focus_line=19, 
+                main_lines=(21, 26), 
+                text="""We define uninitialized objects using classes from mollusc for configuration, the drivetrain, and odometry pods. These will be initialized later. Defining these within the class scope allows us to access them from class methods."""
+            ), 
+            Step(
+                main_lines=(28, 32), 
+                text="""Here, we're initializing the subsystem objects directly within the class scope since we want to access attributes immediately."""
+            ), 
+            Step(
+                section=(36, 110), 
+                focus_line=1, 
+                main_lines=(36, 36), 
+                text="""The constructor is responsible for the bulk of hardware initialization. A `SquidWare` object is instantiated per the autonomous and TeleOp, which passes an already created configuration object to the constructor."""
             )
         ])
 
