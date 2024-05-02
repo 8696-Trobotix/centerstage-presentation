@@ -464,6 +464,44 @@ class Initialization(Slide):
                 focus_line=1, 
                 main_lines=(36, 36), 
                 text="""The constructor is responsible for the bulk of hardware initialization. A `SquidWare` object is instantiated per the autonomous and TeleOp, which passes an already created configuration object to the constructor."""
+            ), 
+            Step(
+                main_lines=(36, 36), 
+                text="""This constructor must be marked as potentially thowing exceptions because `config` may be asked to obtain a configuration value that doesn't exist or is invalid."""
+            )
+            Step(
+                main_lines=(39, 62), 
+                text="""Each attribute in the intake subsystem (initialized earlier) is set using a configuration value obtained from the `config` object. If the value is not present or invalid, the entire constructor will cease execution and throw an exception to be handled by the autonomous / TeleOp."""
+            ), 
+            Step(
+                focus_line=64, 
+                main_lines=(64, 64), 
+                text="""The `Make` class is provided by mollusc to make the process of initializing common hardware components (e.g. motors and servos) easier. With it, one can initialize a motor and set its direction without needing to specify separate method calls."""
+            ), 
+            Step(
+                main_lines=(66, 71), 
+                text="""`make.imu` is a method called from the `make` object which returns an initialized IMU with a specified name and orientation."""
+            ), 
+            Step(
+                main_lines=(73, 78), 
+                text="""Here, we're initializing base as a new four wheel drivetrain base. We use the `make` object again to create each of the four base motors. `getStringConfigDirection` is a method that takes a string ("forward" or "reverse") and returns the proper enum types."""
+            ), 
+            Step(
+                focus_line=112, 
+                text="""This is the `getStringConfigDirectionMethod`."""
+            ), 
+            Step(
+                focus_line=80, 
+                main_lines=(80, 98), 
+                text="""Continue initializing trivial hardware."""
+            ), 
+            Step(
+                main_lines=(99, 106), 
+                text="""An `Encoder` object is really just a motor, but additional methods have been provided to get the encoder ticks / counts, revolutions, and displacement. "TPR" is short for "ticks per revolution". When instantiating a new `Encoder`, you can provide either a string name, existing motor, followed by a multiplier (a negative multiplier effectively reverses the encoder direction), the TPR, and finally the wheel diameter (if applicable)."""
+            ), 
+            Step(
+                main_lines=(102, 106), 
+                text="""Initializing the odometry pod object respondible for calculating the robot's coordinates. In the future, this team may want to invest in learning Road Runner, a library that provides more advanced and accurate odometry control. The process is more lengthy, but could potentially result in more accurate robot movements, especially as the robot's mass increases or if a constant velocity is absolutely required. The `DeadWheels` object is instantiated with an initial orientation of 180 degrees, or a pose of (0, 0, PI radians). Each of the odometry pod encoders are supplied and we provide the track width (distance between two parallel encoders) and the center offset (distance between the perpendicular encoder and the robot's center of rotation). The units of these values are up to the user, so long as they're consistent with the way the encoders were initialized and the user keeps them in mind. Here, we're using millimeters."""
             )
         ])
 
