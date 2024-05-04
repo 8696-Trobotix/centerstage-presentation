@@ -1,0 +1,356 @@
+
+This is the cache, where one dumps code for later or never.
+
+
+
+
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+        // Configure IMU.
+
+        if (telemetry != null) {
+            telemetry.log().add("Initialized field centric hardware.");
+            telemetry.update();
+        }
+
+        // Connect motors.
+        frontLeft  = hardwareMap.get(DcMotorEx.class, fl);
+        frontRight = hardwareMap.get(DcMotorEx.class, fr);
+        rearLeft   = hardwareMap.get(DcMotorEx.class, rl);
+        rearRight  = hardwareMap.get(DcMotorEx.class, rr);
+
+        // Set motor directions.
+        frontLeft.setDirection(fld);
+        frontRight.setDirection(frd);
+        rearLeft.setDirection(rld);
+        rearRight.setDirection(rrd);
+
+        // Set motors to brake.
+        frontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rearLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rearRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+
+
+    public static Telemetry telemetry;
+
+    // public static String 
+
+    // public static void getBoolean(String label, boolean defaultValue) {
+    //     getBoolean(label, "true", "false", defaultValue);
+    // }
+    // public static void getBoolean(String label, String trueLabel, String falseLabel, boolean defaultValue) {
+    // }
+    // public static void saveBoolean(boolean value) {
+    // }
+    // public static boolean loadBoolean() {
+    // }
+
+    public long BOOL_DELAY = 100;
+    public long DOUBLE_DELAY = 250;
+    public long FULL_CHARGE_VOLTAGE = 14;
+
+    public boolean bool(OpMode opMode, LinearOpMode linearOpMode, Gamepad gamepad1, boolean defaultValue, String caption, String label0, String label1) {
+        boolean autoClear = telemetry.isAutoClear();
+        if (autoClear) telemetry.setAutoClear(false); // Can't clear items now.
+        boolean b = defaultValue; // Not strictly necessary, but good for being explicit.
+        Telemetry.Item telItem = telemetry.addData(caption, b ? label1 : label0);
+        while (!gamepad1.a) {
+            telItem.setValue(b ? label1 : label0);
+            telemetry.update();
+            if (gamepad1.dpad_up) b = false;
+            else if (gamepad1.dpad_down) b = true;
+            if (opMode == null){
+                linearOpMode.sleep(BOOL_DELAY);
+            } else {
+                // opMode.sleep(BOOL_DELAY);
+            }
+        }
+        while (gamepad1.a); // In case they hold A for too long.
+        telItem.setCaption(caption.toUpperCase());
+        telemetry.update();
+        if (autoClear) telemetry.setAutoClear(true); // Reset to original state.
+        return b;
+    }
+
+    public double float64(OpMode opMode, LinearOpMode linearOpMode, Gamepad gamepad1, double defaultValue, double var, int precision, String caption) {
+        boolean autoClear = telemetry.isAutoClear();
+        if (autoClear) telemetry.setAutoClear(false);
+        double num = defaultValue;
+        Telemetry.Item telItem = telemetry.addData(caption, (long) (num * Math.pow(10, precision)) / Math.pow(10, precision));
+        while (!gamepad1.a) {
+            telItem.setValue((long) (num * Math.pow(10, precision)) / Math.pow(10, precision));
+            telemetry.update();
+            if (gamepad1.dpad_up) num += var;
+            else if (gamepad1.dpad_down) num -= var;
+            if (opMode == null){
+                linearOpMode.sleep(BOOL_DELAY);
+            } else {
+                // opMode.sleep(BOOL_DELAY);
+            }
+        }
+        while (gamepad1.a);
+        telItem.setCaption(caption.toUpperCase());
+        telemetry.update();
+        if (autoClear) telemetry.setAutoClear(true);
+        return num;
+    }
+
+    // public double batteryPower() { // Returns infinity upon error. This is not a level, but the power from 0 to 1.
+    //     double p = Double.POSITIVE_INFINITY;
+    //     for (VoltageSensor sensor : hardwareMap.voltageSensor) {
+    //         double voltage = sensor.getVoltage();
+    //         if (voltage > 0) p = Math.min(p, voltage);
+    //     }
+    //     return (p == Double.POSITIVE_INFINITY ? p : p / FULL_CHARGE_VOLTAGE);
+    // }
+    
+    public void success() {
+        telemetry.log().add("CONFIGURATION COMPLETE");
+        telemetry.update();
+        telemetry.speak("Configuration Complete");
+    }
+
+
+package org.firstinspires.ftc.teamcode.test;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
+
+public class TestPipeline extends OpenCvPipeline {
+
+    // Declare as instance variable to prevent memory leak issue, according to docs.
+    // private Mat grey = new Mat ();
+    private Mat frame = new Mat ();
+    private Mat region1, region2, region3;
+
+    // Variable to get result to the LinearOpMode thread.
+    private boolean[] blueDetection = new boolean [3], redDetection = new boolean [3];
+
+    private Rect r1 = new Rect (new Point (0, 0), new Point (106, 240));
+    private Rect r2 = new Rect (new Point (106, 0), new Point(212, 240));
+    private Rect r3 = new Rect (new Point (212, 0), new Point(308, 240));
+
+    private Scalar blueColor = new Scalar (0, 0, 255), redColor = new Scalar (255, 0, 0);
+
+    @Override
+    public void init(Mat firstFrame) {
+        firstFrame.copyTo(frame);
+        region1 = frame.submat(r1);
+        region2 = frame.submat(r2);
+        region3 = frame.submat(r3);
+    }
+
+    @Override
+    public Mat processFrame(Mat inputFrame) {
+        // Imgproc.cvtColor(input, grey, Imgproc.COLOR_RGB2GRAY);
+        // return grey;
+        // return input; // Placeholder.
+
+        inputFrame.copyTo(frame);
+        int[] blueAverages = {(int) Core.mean(region1).val[2], (int) Core.mean(region2).val[2], (int) Core.mean(region3).val[2]};
+        int[] redAverages = {(int) Core.mean(region1).val[0], (int) Core.mean(region2).val[0], (int) Core.mean(region3).val[0]};
+
+        int blueAverageMax = Math.max(Math.max(blueAverages[0], blueAverages[1]), blueAverages[2]);
+        int redAverageMax = Math.max(Math.max(redAverages[0], redAverages[1]), redAverages[2]);
+
+        int detectedBlueRegion = blueAverageMax == blueAverages[0] ? 1 : (blueAverageMax == blueAverages[1] ? 2 : 3);
+        int detectedRedRegion = redAverageMax == redAverages[0] ? 1 : (redAverageMax == redAverages[1] ? 2 : 3);
+
+        if (detectedBlueRegion == 1) {
+            Imgproc.rectangle( // Copied from example.
+                inputFrame, // Buffer to draw on
+                new Point (r1.x, r1.y), // First point which defines the rectangle
+                new Point (r1.x + r1.width, r1.y + r1.height), // Second point which defines the rectangle
+                blueColor, // The color the rectangle is drawn in
+                4 // Thickness of the rectangle lines
+            );
+        } else if (detectedBlueRegion == 2) {
+            Imgproc.rectangle( // Copied from example.
+                inputFrame, // Buffer to draw on
+                new Point (r2.x, r2.y), // First point which defines the rectangle
+                new Point (r2.x + r2.width, r2.y + r2.height), // Second point which defines the rectangle
+                blueColor, // The color the rectangle is drawn in
+                4 // Thickness of the rectangle lines
+            );
+        } else {
+            Imgproc.rectangle( // Copied from example.
+                inputFrame, // Buffer to draw on
+                new Point (r3.x, r3.y), // First point which defines the rectangle
+                new Point (r3.x + r3.width, r3.y + r3.height), // Second point which defines the rectangle
+                blueColor, // The color the rectangle is drawn in
+                4 // Thickness of the rectangle lines
+            );
+        }
+
+        if (detectedRedRegion == 1) {
+            Imgproc.rectangle( // Copied from example.
+                inputFrame, // Buffer to draw on
+                new Point (r1.x, r1.y), // First point which defines the rectangle
+                new Point (r1.x + r1.width, r1.y + r1.height), // Second point which defines the rectangle
+                redColor, // The color the rectangle is drawn in
+                4 // Thickness of the rectangle lines
+            );
+        } else if (detectedRedRegion == 2) {
+            Imgproc.rectangle( // Copied from example.
+                inputFrame, // Buffer to draw on
+                new Point (r2.x, r2.y), // First point which defines the rectangle
+                new Point (r2.x + r2.width, r2.y + r2.height), // Second point which defines the rectangle
+                redColor, // The color the rectangle is drawn in
+                4 // Thickness of the rectangle lines
+            );
+        } else {
+            Imgproc.rectangle( // Copied from example.
+                inputFrame, // Buffer to draw on
+                new Point (r3.x, r3.y), // First point which defines the rectangle
+                new Point (r3.x + r3.width, r3.y + r3.height), // Second point which defines the rectangle
+                redColor, // The color the rectangle is drawn in
+                4 // Thickness of the rectangle lines
+            );
+        }
+
+        return inputFrame;
+
+    }
+
+    public boolean[] getBlueDetection() {
+        return blueDetection;
+    }
+
+    public boolean[] getRedDetection() {
+        return redDetection;
+    }
+}
+
+===============================================================
+
+package org.firstinspires.ftc.teamcode.test;
+
+// import org.firstinspires.ftc.teamcode.mollusc.drivetrain.MecanumRobotCentric;
+import org.firstinspires.ftc.teamcode.mollusc.drivetrain.MecanumFieldCentric;
+import org.firstinspires.ftc.teamcode.mollusc.utilities.Controls;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+
+// START EXPERIMENTAL
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
+
+// END EXPERIMENTAL
+
+@TeleOp(name="Test", group="Test")
+
+public class Test extends LinearOpMode {
+
+    private MecanumFieldCentric drivetrain;
+
+    private double drive, strafe, turn;
+
+    @Override
+    public void runOpMode() {
+
+        drivetrain = new MecanumFieldCentric(
+            hardwareMap, telemetry, 
+            "frontLeft", DcMotorEx.Direction.REVERSE,
+            "frontRight", DcMotorEx.Direction.FORWARD, 
+            "rearLeft", DcMotorEx.Direction.REVERSE,
+            "rearRight", DcMotorEx.Direction.FORWARD,
+        );
+        drivetrain.setDriveParams(1, 0.9, 1.1, 0);
+        drivetrain.base.zeroEncoders();
+
+        // START EXPERIMENTAL
+
+        // Viewport for live preview.
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        // From docs: camera.pauseViewport(); and webcam.resumeViewport();
+        // SDK provided webcam.
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        // Attach to live preview.
+        OpenCvCamera webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+
+        // Make pipeline.
+        TestPipeline testPipeline = new TestPipeline ();
+        // Set pipeline.
+        webcam.setPipeline(testPipeline);
+
+        // Start streaming asyncronously.
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                // Start streaming.
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+            @Override
+            public void onError(int errorCode) {
+                /*
+                 * This will be called if the camera could not be opened
+                 */
+            }
+        });
+
+        // END EXPERIMENTAL
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+            // Quadratic controller sensitivity.
+            drive  = Controls.quadratic(-gamepad1.left_stick_y);
+            strafe = Controls.quadratic(gamepad1.left_stick_x);
+            turn   = Controls.quadratic(gamepad1.right_stick_x);
+
+            drivetrain.drive(drive, strafe, turn);
+
+            // START EXPERIMENTAL
+
+            boolean[] blueDetection = testPipeline.getBlueDetection(), redDetection = testPipeline.getRedDetection();
+
+            // END EXPERIMENTAL
+
+            int[] encoderCounts = drivetrain.base.getEncoderCounts();
+            telemetry.addData(
+                "Wheel Encoder Values", "%d %d %d %d", 
+                encoderCounts[0], encoderCounts[1], encoderCounts[2], encoderCounts[3]
+            );
+            telemetry.addData(
+                "Blue Detection", "left %d %d %d right", 
+                blueDetection[0], blueDetection[1], blueDetection[2]
+            );
+            telemetry.addData(
+                "Red Detection", "%d %d %d", 
+                redDetection[0], redDetection[1], redDetection[2]
+            );
+            telemetry.update();
+        }
+    }
+}

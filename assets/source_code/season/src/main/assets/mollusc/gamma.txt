@@ -1,0 +1,49 @@
+// Configuration File
+
+field centric on: true
+
+autonomous drive power: 0.5
+
+drive power max: 0.87
+strafe power max: 0.97
+turn power max: 0.87
+drive power max reduced: 0.6
+strafe power max reduced: 0.7
+turn power max reduced: 0.6
+
+frontLeft direction:  reverse
+frontRight direction: forward
+rearLeft direction:   reverse
+rearRight direction:  forward
+
+TPR: 8192
+
+intake servo 1 direction: forward
+intake servo 2 direction: forward
+intake motor direction: forward
+conveyor motor direction: reverse
+
+angling servo direction: forward
+slide motor direction: reverse
+spinner servo 1 direction: forward
+spinner servo 2 direction: forward
+release servo direction: forward
+
+intake servo up 1: 0.52
+intake servo up 2: 0.70
+intake servo down 1: 0.67
+intake servo down 2: 0.55
+intake servo 1 max down: 0.69
+intake servo 2 max down: 0.53
+intake servo delta: 0.01
+intake power: 0.68
+
+conveyor power: 1
+spinning servo powers: 1
+slide min: 10
+slide max: 2050
+angling servo delta: 0.015
+release go: 0
+release reset: 0.3
+
+launcher fire: 1
