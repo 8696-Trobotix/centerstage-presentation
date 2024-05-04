@@ -82,7 +82,7 @@ public class SquidWare {
         intake.motor = make.motor("intake", getStringConfigDirection("intake motor direction").motor);
         
         conveyor.motor = make.motor("conveyor", getStringConfigDirection("conveyor motor direction").motor);
-        conveyor.sensor = Mollusc.instance().hardwareMap.get(DistanceSensor.class, "pixelSensor");
+        conveyor.sensor = Mollusc.opMode.hardwareMap.get(DistanceSensor.class, "pixelSensor");
 
         scoring.angler = make.servo("angler", getStringConfigDirection("angling servo direction").servo);
         scoring.slide = make.motor("slide", getStringConfigDirection("slide motor direction").motor);
