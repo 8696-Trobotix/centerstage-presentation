@@ -468,7 +468,7 @@ class Initialization(Slide):
             Step(
                 main_lines=(36, 36), 
                 text="""This constructor must be marked as potentially thowing exceptions because `config` may be asked to obtain a configuration value that doesn't exist or is invalid."""
-            )
+            ), 
             Step(
                 main_lines=(39, 62), 
                 text="""Each attribute in the intake subsystem (initialized earlier) is set using a configuration value obtained from the `config` object. If the value is not present or invalid, the entire constructor will cease execution and throw an exception to be handled by the autonomous / TeleOp."""
@@ -521,3 +521,5 @@ class Test(Scene):
 
             self.wait(1)
             self.next_section()
+
+            break
