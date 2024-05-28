@@ -509,17 +509,17 @@ import mods.code_mobject
 class Test(Scene):
     def construct(self):
         for style in Code.styles_list:
-            self.add(
-                mods.code_mobject.Code(
-                    "assets/source_code/SquidWare.java", 
-                    tab_width=4, 
-                    background="window", 
-                    language="java", 
-                    style=style
-                ).scale(0.25)
-            )
+            thing = mods.code_mobject.Code(
+                "assets/source_code/SquidWare.java", 
+                tab_width=4, 
+                background="window", 
+                language="java", 
+                style=style
+            ).scale(0.5)
 
+            self.add(thing)
+            self.play(thing.animate.shift(DOWN * 15))
+            self.play(thing.animate.shift(UP * 15))
             self.wait(1)
-            self.next_section()
 
             break

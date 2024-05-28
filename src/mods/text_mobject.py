@@ -483,16 +483,17 @@ class Text(SVGMobject):
             self.line_spacing = self._font_size + self._font_size * self.line_spacing
 
         color = Color(color) if color else VMobject().color
+
         # Begin modification.
-        mod_file_names = self._text2svg(color)
+
         # file_name = self._text2svg(color)
-        # PangoUtils.remove_last_M(file_name)
-        for mod_f in mod_file_names:
-            PangoUtils.remove_last_M(mod_f)
-        # print("p chars 1", len(self.submobjects))
+        mod_file_names = self._text2svg(color)
+
+        for mod_file_name in mod_file_names:
+            # PangoUtils.remove_last_M(file_name)
+            PangoUtils.remove_last_M(mod_file_name)
         super().__init__(
-            # file_name,
-            mod_file_names[0], 
+            mod_file_names[0],
             fill_opacity=fill_opacity,
             stroke_width=stroke_width,
             height=height,
@@ -501,12 +502,28 @@ class Text(SVGMobject):
             use_svg_cache=False,
             **kwargs,
         )
+
+        mod_last_svg = self
+
         for i in range(1, len(mod_file_names)):
-            self.submobjects.extend(SVGMobject(mod_file_names[i]).submobjects)
-        print("p chars", len(self.submobjects))
+            mod_svg_ex = SVGMobject(
+                mod_file_names[i], 
+                fill_opacity=fill_opacity,
+                stroke_width=stroke_width,
+                height=height,
+                width=width,
+                should_center=should_center,
+                use_svg_cache=False,
+                **kwargs,
+            ).next_to(mod_last_svg, DOWN)
+            mod_svg_ex.shift((mod_svg_ex.width - mod_last_svg.width) / 2 * RIGHT)
+            self.submobjects.extend(mod_svg_ex.submobjects)
+            mod_last_svg = mod_svg_ex
+
+        # End modification.
+
         self.text = text
         if self.disable_ligatures:
-            print("o g chars", len(self.submobjects))
             self.submobjects = [*self._gen_chars()]
         self.chars = self.get_group_class()(*self.submobjects)
         self.text = text_without_tabs.replace(" ", "").replace("\n", "")
@@ -595,7 +612,6 @@ class Text(SVGMobject):
             self.scale(font_val / self.font_size)
 
     def _gen_chars(self):
-        print("g chars", len(self.submobjects))
         chars = self.get_group_class()()
         submobjects_char_index = 0
         for char_index in range(len(self.text)):
@@ -609,12 +625,6 @@ class Text(SVGMobject):
                     )
                 chars.add(space)
             else:
-                # Begin modification.
-
-                if len(self.submobjects) <= submobjects_char_index:
-                    continue
-
-                # End modification.
                 chars.add(self.submobjects[submobjects_char_index])
                 submobjects_char_index += 1
         return chars
@@ -809,7 +819,6 @@ class Text(SVGMobject):
         return settings
 
     def _text2svg(self, color: Color):
-        print("PRE")
         """Convert the text to SVG using Pango."""
         size = self._font_size
         line_spacing = self.line_spacing
@@ -819,59 +828,56 @@ class Text(SVGMobject):
         dir_name = config.get_dir("text_dir")
         if not dir_name.is_dir():
             dir_name.mkdir(parents=True)
-        hash_name = self._text2hash(color)
-        file_name = dir_name / (hash_name + ".svg")
 
-        if file_name.exists() and False:
-            svg_file = str(file_name.resolve())
-        else:
-            settings = self._text2settings(color)
-            width = config["pixel_width"]
-            height = config["pixel_height"]
+        # Begin modification.
 
-            # The bug is probably right here.
-            print("POST")
+        mod_lines = self.text.split('\n')
+        mod_idx = 0
+        mod_inc = 50
+        mod_len = len(mod_lines)
 
-            # The bug is definitely right here.
-            # Begin modification.
+        mod_svg_files = []
+        mod_original_text = self.text
 
-            mod_svg_files = []
-            mod_idx = 0
-            mod_len = len(self.text)
-            mod_inc = 2000
-            while mod_idx < mod_len:
-                mod_svg_files.append(
-                    manimpango.text2svg(
-                        settings,
-                        size,
-                        line_spacing,
-                        self.disable_ligatures,
-                        str(file_name.resolve()),
-                        START_X,
-                        START_Y,
-                        width,
-                        height,
-                        self.text[mod_idx:mod_idx + mod_inc],
-                    )
+        while mod_idx < mod_len:
+
+            mod_str = "\n".join(mod_lines[mod_idx:mod_idx + mod_inc])
+            if mod_str[0].isspace():
+                mod_str = '\u00b7' + mod_str[1:]
+            self.text = mod_str
+
+            hash_name = self._text2hash(color)
+            file_name = dir_name / (hash_name + ".svg")
+
+            if file_name.exists() and False: # Temporary thing to avoid caching.
+                svg_file = str(file_name.resolve())
+            else:
+                settings = self._text2settings(color)
+                width = config["pixel_width"]
+                height = config["pixel_height"]
+
+                svg_file = manimpango.text2svg(
+                    settings,
+                    size,
+                    line_spacing,
+                    self.disable_ligatures,
+                    str(file_name.resolve()),
+                    START_X,
+                    START_Y,
+                    width,
+                    height,
+                    self.text,
                 )
+
+                mod_svg_files.append(svg_file)
                 mod_idx += mod_inc
 
-            # End modification
-            # svg_file = manimpango.text2svg(
-            #     settings,
-            #     size,
-            #     line_spacing,
-            #     self.disable_ligatures,
-            #     str(file_name.resolve()),
-            #     START_X,
-            #     START_Y,
-            #     width,
-            #     height,
-            #     self.text,
-            # )
-            # print(type(svg_file), svg_file)
+        self.text = mod_original_text
 
+        # return svg_file
         return mod_svg_files
+
+        # End modification.
 
     def init_colors(self, propagate_colors=True):
         if config.renderer == RendererType.OPENGL:
