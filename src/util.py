@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from manim import *
 from manim_slides import Slide
 
-# import mods.code_mobject
+import mods.code_mobject
 
 animation_buffer = []
 
@@ -93,7 +93,7 @@ def unhighlight_line(code: Code, line_num: int):
     return Uncreate(hl_surrounding.pop(line_num))
 
 def get_source_code(file_name: str, title: Title, lang):
-    return code_mobject.Code(
+    return mods.code_mobject.Code(
         f"assets/source_code/{file_name}", 
         tab_width=4, 
         background="window", 
