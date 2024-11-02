@@ -673,7 +673,7 @@ class Text(SVGMobject):
     def _text2hash(self, color: Color):
         """Generates ``sha256`` hash for file name."""
         settings = (
-            "PANGO" + self.font + self.slant + self.weight + color.hex_l
+            "PANGO" + self.font + self.slant + self.weight# + color.hex_l
         )  # to differentiate Text and CairoText
         settings += str(self.t2f) + str(self.t2s) + str(self.t2w) + str(self.t2c)
         settings += str(self.line_spacing) + str(self._font_size)
