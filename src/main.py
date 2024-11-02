@@ -505,21 +505,21 @@ class Initialization(Slide):
             )
         ])
 
-import mods.code_mobject
-class Test(Slide):
-    def construct(self):
-        for style in Code.styles_list:
-            thing = mods.code_mobject.Code(
-                "assets/source_code/SquidWare.java", 
-                tab_width=4, 
-                background="window", 
-                language="java", 
-                style=style
-            ).scale(0.5)
+# import mods.code_mobject
+# class Test(Slide):
+#     def construct(self):
+#         for style in Code.styles_list:
+#             thing = mods.code_mobject.Code(
+#                 "assets/source_code/SquidWare.java", 
+#                 tab_width=4, 
+#                 background="window", 
+#                 language="java", 
+#                 style=style
+#             ).scale(0.5)
 
-            self.add(thing)
-            self.play(thing.animate.shift(DOWN * 15))
-            self.play(thing.animate.shift(UP * 15))
-            self.wait(1)
+#             self.add(thing)
+#             self.play(thing.animate.shift(DOWN * 15))
+#             self.play(thing.animate.shift(UP * 15))
+#             self.wait(1)
 
-            break
+#             break
