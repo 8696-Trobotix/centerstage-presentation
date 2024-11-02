@@ -506,7 +506,7 @@ class Initialization(Slide):
         ])
 
 import mods.code_mobject
-class Test(Scene):
+class Test(Slide):
     def construct(self):
         for style in Code.styles_list:
             thing = mods.code_mobject.Code(

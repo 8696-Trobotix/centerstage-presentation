@@ -1,3 +1,5 @@
+An animated presentation to explain the Trobotix codebase for CENTERSTAGE (incomplete for the indefinite future).
+
 # Manim Slides Starter
 
 [![Deploy static content to Pages](../../actions/workflows/deploy_pages.yml/badge.svg)](../../actions/workflows/deploy_pages.yml)
